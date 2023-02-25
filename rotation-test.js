@@ -3,6 +3,7 @@ function lumaStar(x, y, rotation) {
   push();
   translate(x, y);
   rotate(rotation);
+  translate(-252, -220);
 
   // rainbow
   noStroke();
@@ -57,28 +58,29 @@ function scenery() {
   background(0, 0, 0);
   noStroke();
   fill(107, 107, 107);
-  rect(0, 450, width);
+  rect(0, 618, width);
   fill(65, 65, 65);
-  ellipse(60, 494, 40, 30);
-  ellipse(406, 504, 40, 30);
-  ellipse(526, 536, 40, 30);
-  ellipse(89, 546, 40, 30);
-  ellipse(233, 501, 40, 30);
+  ellipse(60, 694, 40, 30);
+  ellipse(406, 704, 40, 30);
+  ellipse(526, 700, 40, 30);
+  ellipse(89, 660, 40, 30);
+  ellipse(233, 701, 40, 30);
 }
 
-// attempt in creating rotation from lecture
-
-let x = 100;
-let y = 100;
-let rotation = 0;
-let speed = 0;
+// gravity
+let yPosition = 100;
+let velocity = 1;
+let acceleration = 0.2;
 
 function draw() {
-  scenery();
-  lumaStar(x, y, rotation);
+  // adding rotation in draw function, how to fix?
+  let xRotate = 200;
+  let yRotate = 200;
+  let rotation = 0;
+  let speed = 0;
 
-  x = x + Math.sin(rotation) * speed;
-  y = y + Math.cos(rotation) * speed;
+  xRotate = xRotate + Math.sin(rotation) * speed;
+  yRotate = yRotate + Math.cos(rotation) * speed;
 
   if (keyIsDown(40)) {
     speed = 5;
@@ -91,5 +93,17 @@ function draw() {
     rotation = rotation - 0.03;
   } else if (keyIsDown(37)) {
     rotation = rotation + 0.03;
+  }
+  // end of rotation
+
+  scenery();
+  lumaStar(100, yPosition, rotation);
+
+  // gravity
+  yPosition = yPosition + velocity;
+  velocity = velocity + acceleration;
+
+  if (yPosition > 600) {
+    velocity = 0;
   }
 }

@@ -1,3 +1,5 @@
+createCanvas(675, 724);
+
 // luma star
 function lumaStar(x, y) {
   push();
