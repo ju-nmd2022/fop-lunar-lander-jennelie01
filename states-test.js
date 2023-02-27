@@ -71,8 +71,30 @@ function scenery() {
   ellipse(233, 701, 40, 30);
 }
 
+let state = "start";
+
+function draw() {
+  if (state === "start") {
+    startGame();
+  } else if (state === "play") {
+    playGame();
+  } else if (state === "lost") {
+    lostGame();
+  } else if (state === "won") {
+    wonGame();
+  }
+}
+
+function mouseClicked() {
+  if (state === "start") {
+    state = "play";
+  } else if (state === "lost" || "won") {
+    state = "play";
+  }
+}
+
 // adapted from flappy bird example
-let xPosition = 100;
+let xPosition = 300;
 let yPosition = 100;
 let velocity = 1;
 let acceleration = 0.2;
@@ -95,19 +117,16 @@ function startGame() {
 function playGame() {
   scenery();
   lumaStar(xPosition, yPosition, rotation);
+  state = "play";
 
-  // rotation
-  /* xRotate = xRotate + Math.sin(rotation) * speed;
-  yRotate = yRotate + Math.cos(rotation) * speed;
-  // if (keyIsDown(40)) {
-  //speed = 5; */
+  // moving luma up
   if (keyIsDown(38)) {
     velocity = velocity - 0.5;
   } else {
     speed = 0;
   }
 
-  // moving luma position
+  // moving luma left and right
   if (keyIsDown(39)) {
     xPosition = xPosition + 1;
   } else if (keyIsDown(37)) {
@@ -119,42 +138,37 @@ function playGame() {
   velocity = velocity + acceleration;
 
   if (yPosition > 600) {
-    velocity = 0;
+    //velocity = 0;
   }
 
-  if (yPosition >= 600 && speed > 4) {
+  // the following 15 lines of code has been adapted from Linus Isaksson
+  //console.log(yPosition);
+  //console.log(velocity);
+  if (yPosition >= 600 && velocity >= 5) {
     state = "lost";
-  }
-}
-
-function lostGame() {
-  background(0, 255, 0);
-  text("you lost! click on the screen to try again", 336, 263);
-}
-
-function wonGame() {
-  background(0, 0, 0);
-  text("you won! click on the screen to play again", 336, 263);
-}
-
-let state = "start";
-
-function draw() {
-  if (state === "start") {
-    startGame();
-  } else if (state === "play") {
-    playGame();
-  } else if (state === "lost") {
+    yPosition = 100;
+    velocity = 1;
+    acceleration = 0.2;
+    speed = 0;
     lostGame();
-  } else if (state === "won") {
+  } else if (yPosition >= 600 && velocity < 5) {
+    state = "won";
+    yPosition = 100;
+    velocity = 1;
+    acceleration = 0.2;
+    speed = 0;
     wonGame();
   }
 }
 
-function mouseClicked() {
-  if (state === "start") {
-    state = "play";
-  } else if (state === "lost" || "won") {
-    state = "play";
-  }
+function lostGame() {
+  fill(255, 255, 255);
+  text("you lost!", 70, 240);
+  text("click on the screen to try again", 140, 440);
+}
+
+function wonGame() {
+  fill(255, 255, 255);
+  text("You won!", 70, 240);
+  text("click on the screen to play again", 70, 440);
 }
