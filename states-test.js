@@ -7,7 +7,7 @@ function lumaStar(x, y, rotation) {
   rotate(rotation);
   translate(-252, -220);
 
-  if (keyIsDown(38)) {
+  if (keyIsDown(40)) {
     // rainbow
     noStroke();
     fill(255, 0, 0);
@@ -104,7 +104,7 @@ let rotation = 0;
 let speed = 0;
 
 // states
-// the following 42 lines was adapted from lecture 10
+// the following 42 lines has been adapted from lecture 10
 function startGame() {
   background(0, 0, 0);
   fill(255, 255, 255);
@@ -120,7 +120,7 @@ function playGame() {
   state = "play";
 
   // moving luma up
-  if (keyIsDown(38)) {
+  if (keyIsDown(40)) {
     velocity = velocity - 0.5;
   } else {
     speed = 0;
@@ -137,16 +137,13 @@ function playGame() {
   yPosition = yPosition + velocity;
   velocity = velocity + acceleration;
 
-  if (yPosition > 600) {
-    //velocity = 0;
-  }
-
   // the following 15 lines of code has been adapted from Linus Isaksson
   //console.log(yPosition);
   //console.log(velocity);
   if (yPosition >= 600 && velocity >= 5) {
     state = "lost";
     yPosition = 100;
+    xPosition = 300;
     velocity = 1;
     acceleration = 0.2;
     speed = 0;
@@ -154,6 +151,7 @@ function playGame() {
   } else if (yPosition >= 600 && velocity < 5) {
     state = "won";
     yPosition = 100;
+    xPosition = 300;
     velocity = 1;
     acceleration = 0.2;
     speed = 0;
@@ -162,13 +160,15 @@ function playGame() {
 }
 
 function lostGame() {
+  fill(255, 255, 0);
+  text("You lost!", 235, 240);
   fill(255, 255, 255);
-  text("you lost!", 70, 240);
-  text("click on the screen to try again", 140, 440);
+  text("Click on the screen to try again", 90, 350);
 }
 
 function wonGame() {
+  fill(255, 255, 0);
+  text("You won!", 235, 240);
   fill(255, 255, 255);
-  text("You won!", 70, 240);
-  text("click on the screen to play again", 70, 440);
+  text("click on the screen to play again", 90, 350);
 }
