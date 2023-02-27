@@ -5,22 +5,24 @@ function lumaStar(x, y, rotation) {
   rotate(rotation);
   translate(-252, -220);
 
-  // rainbow
-  noStroke();
-  fill(255, 0, 0);
-  rect(211.74, 275.92, 12, 60);
-  fill(255, 200, 0);
-  rect(223.11, 275.92, 12, 60);
-  fill(255, 255, 0);
-  rect(235.11, 275.92, 12, 60);
-  fill(0, 255, 0);
-  rect(246, 275.92, 12, 60);
-  fill(0, 0, 255);
-  rect(258.11, 275.92, 12, 60);
-  fill(102, 45, 145);
-  rect(270.11, 275.92, 12, 60);
-  fill(146, 39, 142);
-  rect(282.11, 275.92, 12, 60);
+  if (keyIsDown(38)) {
+    // rainbow
+    noStroke();
+    fill(255, 0, 0);
+    rect(211.74, 275.92, 12, 60);
+    fill(255, 200, 0);
+    rect(223.11, 275.92, 12, 60);
+    fill(255, 255, 0);
+    rect(235.11, 275.92, 12, 60);
+    fill(0, 255, 0);
+    rect(246, 275.92, 12, 60);
+    fill(0, 0, 255);
+    rect(258.11, 275.92, 12, 60);
+    fill(102, 45, 145);
+    rect(270.11, 275.92, 12, 60);
+    fill(146, 39, 142);
+    rect(282.11, 275.92, 12, 60);
+  }
 
   // star shape
   stroke(0);
@@ -68,36 +70,37 @@ function scenery() {
 }
 
 // gravity
+// adapted from flappy bird example
+let xPosition = 100;
 let yPosition = 100;
 let velocity = 1;
 let acceleration = 0.2;
+let xRotate = 200;
+let yRotate = 200;
+let rotation = 0;
+let speed = 0;
 
 function draw() {
-  // adding rotation in draw function, how to fix?
-  let xRotate = 200;
-  let yRotate = 200;
-  let rotation = 0;
-  let speed = 0;
+  scenery();
+  lumaStar(xPosition, yPosition, rotation);
 
+  // rotation
   xRotate = xRotate + Math.sin(rotation) * speed;
   yRotate = yRotate + Math.cos(rotation) * speed;
-
-  if (keyIsDown(40)) {
-    speed = 5;
-  } else if (keyIsDown(38)) {
-    speed = -5;
+  // if (keyIsDown(40)) {
+  //speed = 5;
+  if (keyIsDown(38)) {
+    velocity = velocity - 0.5;
   } else {
     speed = 0;
   }
+
   if (keyIsDown(39)) {
-    rotation = rotation - 0.03;
+    xPosition = xPosition + 1;
   } else if (keyIsDown(37)) {
-    rotation = rotation + 0.03;
+    xPosition = xPosition - 1;
   }
   // end of rotation
-
-  scenery();
-  lumaStar(100, yPosition, rotation);
 
   // gravity
   yPosition = yPosition + velocity;
@@ -106,4 +109,5 @@ function draw() {
   if (yPosition > 600) {
     velocity = 0;
   }
+  // end of gravity
 }
