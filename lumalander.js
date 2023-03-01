@@ -1,3 +1,5 @@
+createCanvas(591, 724);
+
 // luma star
 function lumaStar(x, y, rotation) {
   push();
@@ -5,7 +7,7 @@ function lumaStar(x, y, rotation) {
   rotate(rotation);
   translate(-252, -220);
 
-  if (keyIsDown(38)) {
+  if (keyIsDown(40)) {
     // rainbow
     noStroke();
     fill(255, 0, 0);
@@ -69,9 +71,31 @@ function scenery() {
   ellipse(233, 701, 40, 30);
 }
 
-// gravity
-// adapted from flappy bird example
-let xPosition = 100;
+// the following 20 lines have been adapted from lecture about states
+let state = "start";
+
+function draw() {
+  if (state === "start") {
+    startGame();
+  } else if (state === "play") {
+    playGame();
+  } else if (state === "lost") {
+    lostGame();
+  } else if (state === "won") {
+    wonGame();
+  }
+}
+
+function mouseClicked() {
+  if (state === "start") {
+    state = "play";
+  } else if (state === "lost" || "won") {
+    state = "play";
+  }
+}
+
+// the following 9 lines have been adapted from flappy bird example
+let xPosition = 300;
 let yPosition = 100;
 let velocity = 1;
 let acceleration = 0.2;
@@ -80,34 +104,70 @@ let yRotate = 200;
 let rotation = 0;
 let speed = 0;
 
-function draw() {
+// states
+function startGame() {
+  background(0, 0, 0);
+  fill(255, 255, 255);
+  text("Welcome to the Luma Lander game!", 70, 240);
+  textSize(30);
+  fill(255, 255, 0);
+  text("Click on the screen to start", 140, 400);
+}
+
+// the following lines about velocity and acceleration have been adapted from lectures
+function playGame() {
   scenery();
   lumaStar(xPosition, yPosition, rotation);
+  state = "play";
 
-  // rotation
-  xRotate = xRotate + Math.sin(rotation) * speed;
-  yRotate = yRotate + Math.cos(rotation) * speed;
-  // if (keyIsDown(40)) {
-  //speed = 5;
-  if (keyIsDown(38)) {
+  // moving luma up
+  if (keyIsDown(40)) {
     velocity = velocity - 0.5;
   } else {
     speed = 0;
   }
 
+  // moving luma left and right
   if (keyIsDown(39)) {
     xPosition = xPosition + 1;
   } else if (keyIsDown(37)) {
     xPosition = xPosition - 1;
   }
-  // end of rotation
 
   // gravity
   yPosition = yPosition + velocity;
   velocity = velocity + acceleration;
 
-  if (yPosition > 600) {
-    velocity = 0;
+  // the following 16 lines of code has been adapted from Linus Isaksson
+  if (yPosition >= 600 && velocity >= 5) {
+    state = "lost";
+    yPosition = 100;
+    xPosition = 300;
+    velocity = 1;
+    acceleration = 0.2;
+    speed = 0;
+    lostGame();
+  } else if (yPosition >= 600 && velocity < 5) {
+    state = "won";
+    yPosition = 100;
+    xPosition = 300;
+    velocity = 1;
+    acceleration = 0.2;
+    speed = 0;
+    wonGame();
   }
-  // end of gravity
+}
+
+function lostGame() {
+  fill(255, 255, 0);
+  text("You lost!", 235, 240);
+  fill(255, 255, 255);
+  text("Click on the screen to try again", 90, 350);
+}
+
+function wonGame() {
+  fill(255, 255, 0);
+  text("You won!", 235, 240);
+  fill(255, 255, 255);
+  text("click on the screen to play again", 90, 350);
 }
