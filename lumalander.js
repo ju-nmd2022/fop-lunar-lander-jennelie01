@@ -168,7 +168,7 @@ function playGame() {
 
 function lostGame() {
   fill(255, 255, 0);
-  text("You lost!", 435, 240);
+  text("You crashed!", 435, 240);
   fill(255, 255, 255);
   text("Click on the screen to try again", 290, 350);
 }
